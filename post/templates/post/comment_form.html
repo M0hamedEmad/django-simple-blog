@@ -1,0 +1,14 @@
+{% extends 'main.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <form  method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{form|crispy}}
+        <input class="btn btn-info mb-3" type="submit" value="Create Post ">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="msg">{{messages}}</div>
+            {% endfor %}
+        {% endif %}
+    </form>
+{% endblock %}

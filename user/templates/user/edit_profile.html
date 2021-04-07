@@ -1,0 +1,36 @@
+{% extends 'main.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <form  method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{form|crispy}}        
+        
+        <!-- image field -->
+        <div>
+            <span>edit a profile image</span>
+            <br>
+            <div class="mb-3">
+                <a href="{{user.profile.image.url}}"><img src="{{user.profile.image.url}}" style="width: 220px;" alt=""></a>
+            </div>
+    
+            <label for="image" class="btn btn-outline-secondary">اختار الصورة</label>
+            <input type="file" name="image" id="image" accept="image/*" style="display: none;">
+        </div>
+    
+        <!-- password field -->
+        <div class="mb-3">
+            <label for="id_password_confirm" class="requiredField">
+                Write your password<span class="asteriskField">*</span>
+            </label>
+             <input type="password" name="password_confirm"  maxlength="150" class="textinput textInput form-control" required_id="id_password_confirm">
+        </div>
+
+        <input class="btn btn-info mb-3" type="submit" value="edit ">
+        
+        {% if messages %}
+            {% for message in messages %}
+                <div class="msg">{{message}}</div>
+            {% endfor %}
+        {% endif %}
+    </form>
+{% endblock %}

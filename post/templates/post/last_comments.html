@@ -1,0 +1,6 @@
+<h2 class="mb-4 tm-post-title tm-color-primary">last Comment</h2>
+                        <ul class="tm-mb-75 pl-5 tm-category-list">
+                            {% for comment in latest_comments %}
+                            <li><a href="{% url 'post' comment.post.slug %}" class="tm-color-primary">{{comment.content|slice:"0:40"}}</a></li>
+                            {% endfor %}
+                        </ul>

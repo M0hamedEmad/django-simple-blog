@@ -1,0 +1,83 @@
+{% extends 'main.html' %}
+
+{% block content %}
+            {% include 'post/search.html' %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-warning">{{message}}</div>
+                {% endfor %}
+            {% endif %}
+            <div class="row tm-row">
+                {% for post in posts %}
+                    <article class="col-12 col-md-6 tm-post">
+                        <hr class="tm-hr-primary">
+                        <a href="{% url 'post' post.slug %}" class="effect-lily tm-post-link tm-pt-60">
+                            <div class="tm-post-link-inner">
+                                <img src="{{ post.photo.url }}" alt="Image" class="img-fluid" style="height: 212px;width:424">                            
+                            </div>
+                            <span class="position-absolute tm-new-badge">New</span>
+                            <h2 class="tm-pt-30 tm-color-primary tm-post-title">{{post.title}}</h2>
+                        </a>                    
+                        <p class="tm-pt-30">
+                            {{post.content|slice:'150'}}
+                        </p>
+                        <div class="d-flex justify-content-between tm-pt-45">
+                            <span class="tm-color-primary">
+                                {% for category in post.categories.all %}
+                                    {{category}}{% if not forloop.last %} .{% endif %}
+                                    {% empty %}
+                                    <p>There is no categories</p>
+                                {% endfor %}
+                            </span>
+                            <span class="tm-color-primary">{{post.created_at|date:'F d, y'}}</span>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between">
+                            <span>{{post.comments.count}}</span>
+                            <span>by {{post.author}}</span>
+                        </div>
+                    </article>
+                    {% empty %}
+                    <h2>There is no posts yes</h2>
+                {% endfor %}
+            </div>
+
+            <div class="row tm-row tm-mt-100 tm-mb-75">
+                <div class="tm-prev-next-wrapper">
+                    {% if posts.has_previous %}
+                        <a href="?page={{posts.previous_page_number}}" class="mb-2 tm-btn tm-btn-primary tm-prev-next tm-mr-20">Prev</a>
+                    {% else %}
+                        <a href="" class="mb-2 tm-btn tm-btn-primary tm-prev-next disabled tm-mr-20">Prev</a>
+                    {% endif %}
+
+                    {% if posts.has_next %}
+                        <a href="?page={{posts.next_page_number}}" class="mb-2 tm-btn tm-btn-primary tm-prev-next">Next</a>
+                    {% else %}
+                        <a href="" class="mb-2 tm-btn tm-btn-primary disabled tm-prev-next">Next</a>
+                    {% endif %}
+                </div>
+                <div class="tm-paging-wrapper">
+                    <span class="d-inline-block mr-3">Page</span>
+                    <nav class="tm-paging-nav d-inline-block">
+                        <ul>
+                            {% for page in posts.paginator.page_range %}
+                                {% if page == posts.number or page == posts.number|add:'1' or page == posts.number|add:'-1' or page == posts.number|add:'2' or page == posts.number|add:'-2'  %}
+                                    <li class="tm-paging-item active">
+                                        <a href="?page={{page}}" class="mb-2 tm-btn tm-paging-link">{{page}}</a>
+                                    </li>
+                                {% elif page == posts.paginator.num_pages %}
+                                    <li class="tm-paging-item active">
+                                        <div>
+                                            .... <li class="tm-paging-item active">
+                                                <a href="?page={{page}}" class="mb-2 tm-btn tm-paging-link">{{page}}</a>
+                                            </li>
+                                        </div>
+                                    </li>
+                                {% endif %}
+                                
+                            {% endfor %}
+                        </ul>
+                    </nav>
+                </div>                
+            </div>            
+{% endblock %}
